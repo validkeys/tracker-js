@@ -74,6 +74,6 @@
 
   })();
 
-  window.SkylineTracker = new SkylineTracker();
+  window.SkylineTracker || (window.SkylineTracker = new SkylineTracker());
 
 }).call(this);

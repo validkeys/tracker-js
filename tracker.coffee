@@ -58,4 +58,4 @@ class SkylineTracker
     @request_token = btoa(@project_key + ":" + @api_key)
 
 
-window.SkylineTracker = new SkylineTracker()
+window.SkylineTracker ||= new SkylineTracker()
