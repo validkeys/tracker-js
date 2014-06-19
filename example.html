@@ -1,11 +1,27 @@
 <html>
   <head>
     <title></title>
+    <script charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
     <script charset="utf-8" src="tracker.js"></script>
   </head>
   <body>
+
+    <div>
+      <p>
+        Track Page View
+      </p>
+      <button id="page-view"></button>
+      <script charset="utf-8">
+        $(document).ready(function(){
+          $('#page-view').click(function(){
+            // SkylineTracker.track('')
+          });
+        });
+      </script>
+    </div>
+
     <script charset="utf-8">
-      SkylineTracker.init("06f3d1cc7163c2a9614b2c3d63bd8a6e954a175d83a06ccf3e3cefe9b3efe566","a10641ee3fd8c9e86c6b5136ae08af0e354d2c906d4190b3921baf052ef8c316");
+      SkylineTracker.init("a24d2a062a4b0a37e11896e38856fb2ab47bb45b4be9221e7255ff5956b2705e","7950e6cbb382754971de5707e2fc4f36d61d6af2024350f0a68e805866bf5f14");
     </script>
   </body>
 </html>

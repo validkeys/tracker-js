@@ -20,11 +20,11 @@ class SkylineTracker
 
       @initialized = true
 
-  track: ( title, data = {} ) ->
+  track: ( guid, data = {} ) ->
     throw new Error("Skyline not initialized") if !@initialized
 
     submissionData = {
-      title: title,
+      guid:  guid,
       data:  data
     }
 

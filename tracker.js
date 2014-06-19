@@ -26,7 +26,7 @@
       }
     };
 
-    SkylineTracker.prototype.track = function(title, data) {
+    SkylineTracker.prototype.track = function(guid, data) {
       var ajax, submissionData;
       if (data == null) {
         data = {};
@@ -35,7 +35,7 @@
         throw new Error("Skyline not initialized");
       }
       submissionData = {
-        title: title,
+        guid: guid,
         data: data
       };
       ajax = this._generateXmlHttp();
