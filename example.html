@@ -3,6 +3,15 @@
     <title></title>
     <script charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
     <script charset="utf-8" src="tracker.js"></script>
+    <script type="text/javascript">
+      (function(){
+        var head = document.getElementsByTagName('head')[0],
+          script = document.createElement('script');
+        script.src = "http://assets.cdn.tusk.li/tracker/latest.min.js";
+        script.type = "text/javascript";
+        head.appendChild(script);
+      })()    
+    </script>
   </head>
   <body>
 

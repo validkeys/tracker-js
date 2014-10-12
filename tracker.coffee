@@ -3,18 +3,16 @@ class SkylineTracker
   api_endpoint: "http://localhost:3001/"
 
   project_key: null
-  api_key:     null
 
   request_token: null
 
   initialized: false
 
-  init: (project_key, api_key) ->
-    if project_key is null or api_key is null
+  init: (project_key) ->
+    if project_key is null
       console.error "You havent provided either a project_key or an api_key"
     else
       @project_key = project_key
-      @api_key     = api_key
 
       @_setRequestToken()
 
@@ -32,7 +30,7 @@ class SkylineTracker
     ajax.open "POST", "#{@api_endpoint}events/track"
 
     ajax.setRequestHeader("Content-Type", "application/json; charset=utf-8")
-    ajax.setRequestHeader("Authorization", @request_token)
+    ajax.setRequestHeader("TUSK_TOKEN", @project_key)
     ajax.setRequestHeader("Access-Control-Allow-Origin","*")
 
     ajax.send(JSON.stringify(submissionData))
@@ -55,7 +53,7 @@ class SkylineTracker
 
 
   _setRequestToken: ->
-    @request_token = btoa(@project_key + ":" + @api_key)
+    @request_token = btoa(@project_key:"?")
 
 
 window.SkylineTracker ||= new SkylineTracker()
