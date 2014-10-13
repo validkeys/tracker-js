@@ -1,4 +1,4 @@
-class SkylineTracker
+class Tusk
 
   api_endpoint: "http://localhost:3001/"
 
@@ -22,12 +22,12 @@ class SkylineTracker
     throw new Error("Skyline not initialized") if !@initialized
 
     submissionData = {
-      guid:  guid,
-      data:  data
+      metricToken:  guid,
+      data:         data
     }
 
     ajax = @_generateXmlHttp()
-    ajax.open "POST", "#{@api_endpoint}events/track"
+    ajax.open "POST", "#{@api_endpoint}track"
 
     ajax.setRequestHeader("Content-Type", "application/json; charset=utf-8")
     ajax.setRequestHeader("TUSK_TOKEN", @project_key)
@@ -47,13 +47,13 @@ class SkylineTracker
     xmlhttp.onreadystatechange = =>
       if xmlhttp.readyState is 4
         if xmlhttp.status != 200 && xmlhttp.status != 304
-          console.error "Skyline had a problem connecting. #{xmlhttp.status} : #{JSON.parse(xmlhttp.responseText).errors}"
+          console.error "Tusk had a problem connecting. #{xmlhttp.status} : #{JSON.parse(xmlhttp.responseText).errors}"
 
     xmlhttp
 
 
   _setRequestToken: ->
-    @request_token = btoa(@project_key:"?")
+    @request_token = btoa("#{@project_key}:?")
 
 
-window.SkylineTracker ||= new SkylineTracker()
+window.tsk ||= new Tusk()

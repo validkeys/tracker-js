@@ -7,7 +7,7 @@
       (function(){
         var head = document.getElementsByTagName('head')[0],
           script = document.createElement('script');
-        script.src = "http://assets.cdn.tusk.li/tracker/latest.min.js";
+        script.src = "tracker.js";
         script.type = "text/javascript";
         head.appendChild(script);
       })()    
@@ -23,14 +23,14 @@
       <script charset="utf-8">
         $(document).ready(function(){
           $('#page-view').click(function(){
-            SkylineTracker.track('cc1e7414d09b', {testing: true})
+            tsk.track('a951da86', {testing: true})
           });
         });
       </script>
     </div>
 
     <script charset="utf-8">
-      SkylineTracker.init("f29f624b8a65ac9343bc3630f0a86f32c702c7df9150e6d21f2fad4bd9b14c09","713ae84587be35539e6ca33abd75599fe4027dd480b9753f5ebed2aaf276b3cb");
+      tsk.init("8a0edca2f20c5b6417e00f8a37b54139");
     </script>
   </body>
 </html>
