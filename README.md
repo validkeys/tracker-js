@@ -1,4 +1,4 @@
 tracker-js
 ==========
 
-$ coffee --watch --compile tracker.coffee
+$ coffee --watch --no-header --compile tracker.coffee

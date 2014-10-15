@@ -1,3 +1,6 @@
+###
+V.0.0.1
+###
 class Tusk
 
   api_endpoint: "http://events.api.tusk.li/"
