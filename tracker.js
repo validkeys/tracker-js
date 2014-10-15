@@ -28,6 +28,7 @@ V.0.0.2
       } else {
         this.project_key = project_key;
         if (options['__DEBUG__']) {
+          console.warn("*** TUSK TRACKER IN DEBUG MODE ***");
           this.api_endpoint = "http://localhost:3001/";
         }
         if (options.env) {

@@ -20,6 +20,7 @@ class Tusk
       @project_key = project_key
 
       if options['__DEBUG__']
+        console.warn "*** TUSK TRACKER IN DEBUG MODE ***"
         @api_endpoint = "http://localhost:3001/"
 
       @env = options.env if options.env
