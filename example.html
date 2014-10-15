@@ -23,14 +23,18 @@
       <script charset="utf-8">
         $(document).ready(function(){
           $('#page-view').click(function(){
-            tsk.track('a951da86', {testing: true})
+            // prod: a7713c64
+            // work laptop dev: ce80accf
+            tusk.track('a7713c64', {testing: true})
           });
         });
       </script>
     </div>
 
     <script charset="utf-8">
-      tsk.init("8a0edca2f20c5b6417e00f8a37b54139");
+      // prod: 3931fc8822b24a53a8e8fb8a1cc1c452
+      // work laptop dev: d2cabb14a0dcd5de77ba8b716239acf8
+      tusk.init('3931fc8822b24a53a8e8fb8a1cc1c452', {debug: false});
     </script>
   </body>
 </html>

@@ -5,7 +5,7 @@
   Tusk = (function() {
     function Tusk() {}
 
-    Tusk.prototype.api_endpoint = "http://localhost:3001/";
+    Tusk.prototype.api_endpoint = "http://events.api.tusk.li/";
 
     Tusk.prototype.project_key = null;
 
@@ -13,11 +13,17 @@
 
     Tusk.prototype.initialized = false;
 
-    Tusk.prototype.init = function(project_key) {
+    Tusk.prototype.init = function(project_key, options) {
+      if (options == null) {
+        options = {};
+      }
       if (project_key === null) {
         return console.error("You havent provided either a project_key or an api_key");
       } else {
         this.project_key = project_key;
+        if (options.debug) {
+          this.api_endpoint = "http://localhost:3001/";
+        }
         this._setRequestToken();
         return this.initialized = true;
       }
@@ -71,6 +77,6 @@
 
   })();
 
-  window.tsk || (window.tsk = new Tusk());
+  window.tusk || (window.tusk = new Tusk());
 
 }).call(this);

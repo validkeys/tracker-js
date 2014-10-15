@@ -1,6 +1,6 @@
 class Tusk
 
-  api_endpoint: "http://localhost:3001/"
+  api_endpoint: "http://events.api.tusk.li/"
 
   project_key: null
 
@@ -8,11 +8,14 @@ class Tusk
 
   initialized: false
 
-  init: (project_key) ->
+  init: (project_key, options = {}) ->
     if project_key is null
       console.error "You havent provided either a project_key or an api_key"
     else
       @project_key = project_key
+
+      if options.debug
+        @api_endpoint = "http://localhost:3001/"
 
       @_setRequestToken()
 
@@ -56,4 +59,4 @@ class Tusk
     @request_token = btoa("#{@project_key}:?")
 
 
-window.tsk ||= new Tusk()
+window.tusk ||= new Tusk()
