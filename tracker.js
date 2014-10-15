@@ -1,6 +1,6 @@
 
 /*
-V.0.0.1
+V.0.0.2
  */
 
 (function() {
@@ -12,6 +12,8 @@ V.0.0.1
     Tusk.prototype.api_endpoint = "http://events.api.tusk.li/";
 
     Tusk.prototype.project_key = null;
+
+    Tusk.prototype.env = "production";
 
     Tusk.prototype.request_token = null;
 
@@ -25,8 +27,11 @@ V.0.0.1
         return console.error("You havent provided either a project_key or an api_key");
       } else {
         this.project_key = project_key;
-        if (options.debug) {
+        if (options['__DEBUG__']) {
           this.api_endpoint = "http://localhost:3001/";
+        }
+        if (options.env) {
+          this.env = options.env;
         }
         this._setRequestToken();
         return this.initialized = true;
@@ -41,6 +46,15 @@ V.0.0.1
       if (!this.initialized) {
         throw new Error("Skyline not initialized");
       }
+      data["tusk-env"] = this.env;
+      data["tusk-device-data"] = {
+        width: window.outerWidth,
+        height: window.outerHeight,
+        cookieEnabled: navigator.cookieEnabled ? navigator.cookieEnabled : "unknown",
+        language: navigator.language,
+        platform: navigator.platform,
+        userAgent: navigator.userAgent
+      };
       submissionData = {
         metricToken: guid,
         data: data

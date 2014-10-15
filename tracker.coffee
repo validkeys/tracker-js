@@ -1,15 +1,17 @@
 ###
-V.0.0.1
+V.0.0.2
 ###
 class Tusk
 
   api_endpoint: "http://events.api.tusk.li/"
 
-  project_key: null
+  project_key:    null
 
-  request_token: null
+  env:            "production"
 
-  initialized: false
+  request_token:  null
+
+  initialized:    false
 
   init: (project_key, options = {}) ->
     if project_key is null
@@ -17,8 +19,10 @@ class Tusk
     else
       @project_key = project_key
 
-      if options.debug
+      if options['__DEBUG__']
         @api_endpoint = "http://localhost:3001/"
+
+      @env = options.env if options.env
 
       @_setRequestToken()
 
@@ -26,6 +30,16 @@ class Tusk
 
   track: ( guid, data = {} ) ->
     throw new Error("Skyline not initialized") if !@initialized
+
+    data["tusk-env"] = @env
+    data["tusk-device-data"] = {
+      width:          window.outerWidth,
+      height:         window.outerHeight,
+      cookieEnabled:  if navigator.cookieEnabled then navigator.cookieEnabled else "unknown",
+      language:       navigator.language,
+      platform:       navigator.platform,
+      userAgent:      navigator.userAgent
+    }
 
     submissionData = {
       metricToken:  guid,
