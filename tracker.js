@@ -1,10 +1,19 @@
 
 /*
-V.0.0.3
+V.0.0.4
  */
 
 (function() {
   var Tusk;
+
+  String.prototype.toCamelCase = function() {
+    return this.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2, offset) {
+      if (p2) {
+        return p2.toUpperCase();
+      }
+      return p1.toLowerCase();
+    });
+  };
 
   Tusk = (function() {
     function Tusk() {}
@@ -39,6 +48,61 @@ V.0.0.3
       }
     };
 
+    Tusk.prototype._cleansedData = {};
+
+    Tusk.prototype._buffer = {};
+
+    Tusk.prototype._addToBuffer = function(k, v, path) {
+      var newPath;
+      k = k.replace("$", "");
+      k = k.replace(".", " ");
+      k = k.toCamelCase();
+      newPath = path.length ? "" + path + "." + k : k;
+      return this._buffer[newPath] = v;
+    };
+
+    Tusk.prototype._bufferedData = function() {
+      var depth, i, key, pathSplits, tmp, _i, _name, _ref;
+      tmp = this._cleansedData;
+      for (key in this._buffer) {
+        depth = tmp;
+        pathSplits = key.split(".");
+        for (i = _i = 0, _ref = pathSplits.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          if (i === pathSplits.length - 1) {
+            depth[pathSplits[i]] = this._buffer[key];
+          } else {
+            depth[_name = pathSplits[i]] || (depth[_name] = {});
+            depth = depth[pathSplits[i]];
+          }
+        }
+      }
+      return this._cleansedData;
+    };
+
+    Tusk.prototype._sendToBuffer = function(data, path) {
+      var key, newPath, _results;
+      if (path == null) {
+        path = "";
+      }
+      _results = [];
+      for (key in data) {
+        if (typeof data[key] === "object") {
+          newPath = path.length ? "" + path + "." + key : key;
+          _results.push(this._sendToBuffer(data[key], newPath));
+        } else if (["string", "boolean", "number"].indexOf(typeof data[key]) > -1) {
+          _results.push(this._addToBuffer(key, data[key], path));
+        } else {
+          throw new Error("Unhandled cleanse method for " + (typeof data[key]));
+        }
+      }
+      return _results;
+    };
+
+    Tusk.prototype._cleanseData = function(data, path) {
+      this._sendToBuffer(data, path);
+      return this._bufferedData();
+    };
+
     Tusk.prototype.track = function(guid, data) {
       var ajax, submissionData;
       if (data == null) {
@@ -47,6 +111,7 @@ V.0.0.3
       if (!this.initialized) {
         throw new Error("Skyline not initialized");
       }
+      data = this._cleanseData(data);
       data["tusk-env"] = this.env;
       data["tusk-device-data"] = {
         width: window.outerWidth,

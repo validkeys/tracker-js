@@ -1,6 +1,12 @@
 ###
-V.0.0.3
+V.0.0.4
 ###
+String::toCamelCase = ->
+  @replace /^([A-Z])|\s(\w)/g, (match, p1, p2, offset) ->
+    return p2.toUpperCase()  if p2
+    p1.toLowerCase()
+
+
 class Tusk
 
   api_endpoint: "http://events.api.tusk.li/"
@@ -29,8 +35,58 @@ class Tusk
 
       @initialized = true
 
+
+
+  # should remove any keys with dot notation and camelize them
+  _cleansedData: {}
+
+  _buffer: {}
+
+  _addToBuffer: (k, v, path) ->
+    k = k.replace("$","")
+    k = k.replace("."," ")
+    k = k.toCamelCase()
+    newPath = if path.length then "#{path}.#{k}" else k
+    @_buffer[newPath] = v
+
+  _bufferedData: ->
+    tmp = @_cleansedData
+    for key of @_buffer
+      depth = tmp
+      pathSplits = key.split(".")
+      for i in [0...pathSplits.length]
+        # console.log "#{i} : #{pathSplits.length}", pathSplits
+        if i == pathSplits.length - 1
+          # we are at the value
+          depth[pathSplits[i]] = @_buffer[key]
+        else
+          depth[pathSplits[i]] ||= {}
+          depth = depth[pathSplits[i]]
+
+    @_cleansedData
+
+  _sendToBuffer: (data, path) ->
+    path ?= ""
+    for key of data
+      if typeof data[key] is "object"
+        newPath = if path.length then "#{path}.#{key}" else key
+        @_sendToBuffer(data[key], newPath)
+      else if ["string","boolean","number"].indexOf(typeof data[key]) > -1
+        @_addToBuffer(key, data[key], path)
+      else
+        throw new Error "Unhandled cleanse method for #{typeof data[key]}"
+
+
+  _cleanseData: (data, path) ->
+    @_sendToBuffer(data, path)
+    @_bufferedData()
+
+
+
   track: ( guid, data = {} ) ->
     throw new Error("Skyline not initialized") if !@initialized
+
+    data = @_cleanseData(data)
 
     data["tusk-env"] = @env
     data["tusk-device-data"] = {
