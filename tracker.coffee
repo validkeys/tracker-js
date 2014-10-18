@@ -1,5 +1,5 @@
 ###
-V.0.0.4
+V.0.0.5
 ###
 String::toCamelCase = ->
   @replace /^([A-Z])|\s(\w)/g, (match, p1, p2, offset) ->
@@ -68,13 +68,16 @@ class Tusk
   _sendToBuffer: (data, path) ->
     path ?= ""
     for key of data
+      newPath = if path.length then "#{path}.#{key}" else key
       if typeof data[key] is "object"
-        newPath = if path.length then "#{path}.#{key}" else key
         @_sendToBuffer(data[key], newPath)
       else if ["string","boolean","number"].indexOf(typeof data[key]) > -1
         @_addToBuffer(key, data[key], path)
+      else if typeof data[key] is "undefined"
+        data[key] = "__UNDEFINED__"
+        @_addToBuffer(key, data[key], path)
       else
-        throw new Error "Unhandled cleanse method for #{typeof data[key]}"
+        console.warn "Unhandled cleanse method for #{typeof data[key]}"
 
 
   _cleanseData: (data, path) ->

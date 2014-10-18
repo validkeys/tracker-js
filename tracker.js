@@ -1,6 +1,6 @@
 
 /*
-V.0.0.4
+V.0.0.5
  */
 
 (function() {
@@ -86,13 +86,16 @@ V.0.0.4
       }
       _results = [];
       for (key in data) {
+        newPath = path.length ? "" + path + "." + key : key;
         if (typeof data[key] === "object") {
-          newPath = path.length ? "" + path + "." + key : key;
           _results.push(this._sendToBuffer(data[key], newPath));
         } else if (["string", "boolean", "number"].indexOf(typeof data[key]) > -1) {
           _results.push(this._addToBuffer(key, data[key], path));
+        } else if (typeof data[key] === "undefined") {
+          data[key] = "__UNDEFINED__";
+          _results.push(this._addToBuffer(key, data[key], path));
         } else {
-          throw new Error("Unhandled cleanse method for " + (typeof data[key]));
+          _results.push(console.warn("Unhandled cleanse method for " + (typeof data[key])));
         }
       }
       return _results;
