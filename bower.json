@@ -1,0 +1,6 @@
+{
+  "name": "tusk-tracker",
+  "version": "0.0.6",
+  "main": "tracker.js",
+  "dependencies": {}
+}
